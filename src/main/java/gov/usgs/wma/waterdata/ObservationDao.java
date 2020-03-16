@@ -31,10 +31,11 @@ public class ObservationDao {
 	@Value("classpath:sql/insertTimeSeries.sql")
 	protected Resource insertQuery;
 
-	public void deleteTimeSeries(String timeSeriesUniqueId) {
+	public Integer deleteTimeSeries(String timeSeriesUniqueId) {
+		Integer rowsDeletedCount = null;
 		try {
 			String sql = new String(FileCopyUtils.copyToByteArray(deleteQuery.getInputStream()));
-			jdbcTemplate.update(
+			rowsDeletedCount = jdbcTemplate.update(
 					sql,
 					timeSeriesUniqueId
 			);
@@ -44,20 +45,19 @@ public class ObservationDao {
 			LOG.error("Unable to get SQL statement", e);
 			throw new RuntimeException(e);
 		}
+		return rowsDeletedCount;
 	}
 
 
 	public Integer insertTimeSeries(TimeSeries timeSeries) {
-		Integer rtnCount = null;
+		Integer rowsInsertedCount = null;
 		try {
 			String sql = new String(FileCopyUtils.copyToByteArray(insertQuery.getInputStream()));
-
-			rtnCount = jdbcTemplate.update(
+			rowsInsertedCount = jdbcTemplate.update(
 					sql,
 					new PreparedStatementSetter() {
 						@Override
 						public void setValues(PreparedStatement ps) throws SQLException {
-//							int pos = 1;
 							ps.setString(1, timeSeries.getGroundwaterDailyValueIdentifier());
 							ps.setString(2, timeSeries.getTimeSeriesUniqueId());
 							ps.setString(3, timeSeries.getMonitoringLocationIdentifier());
@@ -78,6 +78,6 @@ public class ObservationDao {
 			LOG.error("Unable to get SQL statement", e);
 			throw new RuntimeException(e);
 		}
-		return rtnCount;
+		return rowsInsertedCount;
 	}
 }

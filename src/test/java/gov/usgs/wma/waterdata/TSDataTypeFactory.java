@@ -21,5 +21,4 @@ public class TSDataTypeFactory extends PostgresqlDataTypeFactory {
 			return super.createDataType(sqlType, sqlTypeName);
 		}
 	}
-
 }

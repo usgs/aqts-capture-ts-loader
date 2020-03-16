@@ -1,11 +1,13 @@
 package gov.usgs.wma.waterdata;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
-import java.util.Map;
 
-
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -30,9 +32,7 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={
 			DBTestConfig.class,
-			ObservationDao.class,
-			TransformDao.class})
-@DatabaseSetup("classpath:/testData/transformDb/groundwaterStatisticalDailyValue/")
+			ObservationDao.class})
 
 @ActiveProfiles("it")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
@@ -41,7 +41,7 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 		TransactionDbUnitTestExecutionListener.class })
 @DbUnitConfiguration(
 		dataSetLoader=FileSensingDataSetLoader.class,
-		databaseConnection={"observation", "transform"}
+		databaseConnection={"observation"}
 )
 @AutoConfigureTestDatabase(replace=Replace.NONE)
 @Transactional(propagation=Propagation.NOT_SUPPORTED)
@@ -50,29 +50,31 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 public class ObservationDaoIT {
 
 	@Autowired
-	private ObservationDao observationDao;
+	public ObservationDao observationDao;
 
-	@Autowired
-	private TransformDao transformDao;
-	private RequestObject timeSeriesUniqueId = new RequestObject();
+	public RequestObject request;
+	public static final String tsUniqueId = "17f83e62b06e4dc29e78d96b4426a255";
 
-	@Test
-	public void testInsert() {
-
-		// get new data, return unique ids
-		timeSeriesUniqueId.setUniqueId("someTimeSeriesUniqueIdFromTestData");
-		List<TimeSeries> actualData = transformDao.getTimeSeries(timeSeriesUniqueId.getUniqueId());
-		assertNotNull(actualData);
-		System.out.println(actualData);
+	@BeforeEach
+	public void setup() {
+		request = new RequestObject();
+		request.setUniqueId(tsUniqueId);
 	}
 
 	@Test
+	@DatabaseSetup(
+			connection="observation",
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/afterInsert/")
+	@ExpectedDatabase(
+			connection="observation",
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/afterDelete/",
+			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void testDelete() {
 
-		// get new data, return unique ids
-		timeSeriesUniqueId.setUniqueId("someTimeSeriesUniqueIdFromTestData");
-		List<TimeSeries> actualData = transformDao.getTimeSeries(timeSeriesUniqueId.getUniqueId());
-		assertNotNull(actualData);
-		System.out.println(actualData);
+		// delete existing data
+		Integer actualRowsDeletedCount = observationDao.deleteTimeSeries(request.getUniqueId());
+		assertNotNull(actualRowsDeletedCount);
+		Integer expectedRowsDeletedCount = 3;
+		assertEquals(expectedRowsDeletedCount, actualRowsDeletedCount);
 	}
 }
