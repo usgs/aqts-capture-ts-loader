@@ -67,25 +67,10 @@ public class TransformDaoIT {
 	public void setup() {
 		request = new RequestObject();
 		request.setUniqueId(tsUniqueId);
-//		Object approvals;
-//		{
-			String approvals = "[\"Approved\"]";
-//			approvals.setType("jsonb");
-//			approvals.setValue("[\"Approved\"]");
-//		}
-//		Object grades;
-//		{
-			String grades = "[\"50\"]";
-//			grades.setType("jsonb");
-//			grades.setValue("[\"50\"]");
-//		}
-		
-//		Object qualifiers;
-//		{
-			String qualifiers = null;
-//			qualifiers.setType("jsonb");
-//			qualifiers.setValue("NULL");
-//		}
+
+		String approvals = "[\"Approved\"]";
+		String grades = "[\"50\"]";
+		String qualifiers = null;
 
 		TimeSeries timeSeries1 = new TimeSeries();
 		timeSeries1.setGroundwaterDailyValueIdentifier("USGS-132624144452771-17f83e62b06e4dc29e78d96b4426a255");
