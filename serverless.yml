@@ -1,0 +1,52 @@
+service: aqts-capture-ts-loader
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-west-2'}
+  stage: ${opt:stage, 'TEST'}
+  runtime: java11
+  memorySize: 768
+  timeout: 60
+  logRetentionInDays: 30
+  deploymentBucket:
+    name: iow-cloud-applications
+  stackTags:
+    "wma:applicationId": "AQTS Capture Time Series Loader"
+    "wma:contact": "Jim Kreft jkreft@usgs.gov"
+    "wma:environment": ${self:provider.stage}
+    "wma:taggingVersion": ${opt:taggingVersion}
+    "wma:costCenter": TBD
+
+custom:
+  accountNumber : ${ssm:/iow/aws/accountNumber}
+  vpc:
+    securityGroupIds: ${ssm:/iow/retriever-capture/${self:provider.stage}/securityGroupIds~split}
+    subnetIds: ${ssm:/iow/aws/vpc/${self:provider.stage}/subnetIds~split}
+  transformDb:
+    connectInfo: ${ssm:/aws/reference/secretsmanager/NWCAPTURE-DB-${self:provider.stage}~true}
+  observationDb:
+    connectInfo: ${ssm:/aws/reference/secretsmanager/WQP-EXTERNAL-${self:provider.stage}~true}
+
+functions:
+  loadTimeSeries:
+    handler: gov.usgs.wma.waterdata.LoadTimeSeriesHandler
+    role: arn:aws:iam::${self:custom.accountNumber}:role/csr-Lambda-Role
+    environment:
+      FUNCTION_NAME: loadTimeSeries
+      AWS_DEPLOYMENT_REGION: ${self:provider.region}
+      TRANSFORM_DATABASE_ADDRESS: ${self:custom.transformDb.connectInfo.DATABASE_ADDRESS}
+      TRANSFORM_DATABASE_PORT: ${self:custom.transformDb.connectInfo.DATABASE_PORT}
+      TRANSFORM_DATABASE_NAME: ${self:custom.transformDb.connectInfo.DATABASE_NAME}
+      TRANSFORM_SCHEMA_NAME: ${self:custom.transformDb.connectInfo.SCHEMA_NAME}
+      TRANSFORM_SCHEMA_OWNER_USERNAME: ${self:custom.transformDb.connectInfo.SCHEMA_OWNER_USERNAME}
+      TRANSFORM_SCHEMA_OWNER_PASSWORD: ${self:custom.transformDb.connectInfo.SCHEMA_OWNER_PASSWORD}
+      OBSERVATION_DATABASE_ADDRESS: ${self:custom.observationDb.connectInfo.DATABASE_ADDRESS}
+      OBSERVATION_DATABASE_PORT: ${self:custom.observationDb.connectInfo.DATABASE_PORT}
+      OBSERVATION_DATABASE_NAME: ${self:custom.observationDb.connectInfo.DATABASE_NAME}
+      OBSERVATION_SCHEMA_NAME: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_NAME}
+      OBSERVATION_SCHEMA_OWNER_USERNAME: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_OWNER_USERNAME}
+      OBSERVATION_SCHEMA_OWNER_PASSWORD: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_OWNER_PASSWORD}
+    vpc: ${self:custom.vpc}
+
+package:
+  artifact: aqts-capture-ts-loader-aws.jar
