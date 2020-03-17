@@ -72,7 +72,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
+        <version>2.2.5.RELEASE</version>
     </parent>
 
 
@@ -191,6 +191,26 @@
                 <version>1.11.2</version>
                 <configuration>
                     <tag>${project.artifactId}-${project.version}</tag>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <TRANSFORM_DATABASE_ADDRESS>${TRANSFORM_TESTING_DATABASE_ADDRESS}</TRANSFORM_DATABASE_ADDRESS>
+                        <TRANSFORM_DATABASE_PORT>${TRANSFORM_TESTING_DATABASE_PORT}</TRANSFORM_DATABASE_PORT>
+                        <TRANSFORM_DATABASE_NAME>database_name</TRANSFORM_DATABASE_NAME>
+                        <TRANSFORM_SCHEMA_NAME>schema_name</TRANSFORM_SCHEMA_NAME>
+                        <TRANSFORM_SCHEMA_OWNER_USERNAME>schema_owner</TRANSFORM_SCHEMA_OWNER_USERNAME>
+                        <TRANSFORM_SCHEMA_OWNER_PASSWORD>changeMe</TRANSFORM_SCHEMA_OWNER_PASSWORD>
+                        <OBSERVATION_DATABASE_ADDRESS>${OBSERVATION_TESTING_DATABASE_ADDRESS}</OBSERVATION_DATABASE_ADDRESS>
+                        <OBSERVATION_DATABASE_PORT>${OBSERVATION_TESTING_DATABASE_PORT}</OBSERVATION_DATABASE_PORT>
+                        <OBSERVATION_DATABASE_NAME>wqp_db</OBSERVATION_DATABASE_NAME>
+                        <OBSERVATION_SCHEMA_NAME>nwis</OBSERVATION_SCHEMA_NAME>
+                        <OBSERVATION_SCHEMA_OWNER_USERNAME>nwis_ws_star</OBSERVATION_SCHEMA_OWNER_USERNAME>
+                        <OBSERVATION_SCHEMA_OWNER_PASSWORD>changeMe</OBSERVATION_SCHEMA_OWNER_PASSWORD>
+                    </environmentVariables>
                 </configuration>
             </plugin>
             <plugin>
