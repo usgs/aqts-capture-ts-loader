@@ -27,9 +27,11 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
-		classes={DBTestConfig.class, LoadTimeSeries.class, TransformDao.class, ObservationDao.class})
-
-
+		classes={
+			DBTestConfig.class,
+			LoadTimeSeries.class,
+			TransformDao.class,
+			ObservationDao.class})
 @ActiveProfiles("it")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,

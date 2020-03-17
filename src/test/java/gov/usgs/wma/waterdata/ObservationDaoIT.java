@@ -28,12 +28,10 @@ import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 
-
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={
 			DBTestConfig.class,
 			ObservationDao.class})
-
 @ActiveProfiles("it")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,

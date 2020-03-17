@@ -1,6 +1,5 @@
 package gov.usgs.wma.waterdata;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +33,6 @@ public class LoadTimeSeriesTest {
 		genericTimeSeriesList = new ArrayList<>();
 		genericTimeSeries1 = new TimeSeries();
 		genericTimeSeries2 = new TimeSeries();
-		
 	}
 
 	@Test
@@ -54,7 +52,6 @@ public class LoadTimeSeriesTest {
 
 	@Test
 	public void testFoundGeneric() {
-
 		genericTimeSeriesList.add(genericTimeSeries1);
 		genericTimeSeriesList.add(genericTimeSeries2);
 		// happy path - 2 time series returned
@@ -71,7 +68,6 @@ public class LoadTimeSeriesTest {
 
 	@Test
 	public void testFoundGenericNewRecords() {
-
 		genericTimeSeriesList.add(genericTimeSeries1);
 		genericTimeSeriesList.add(genericTimeSeries2);
 		// happy path - 2 time series returned

@@ -25,5 +25,4 @@ public class TimeSeriesRowMapper implements RowMapper<TimeSeries> {
 
 		return timeSeries;
 	}
-
 }

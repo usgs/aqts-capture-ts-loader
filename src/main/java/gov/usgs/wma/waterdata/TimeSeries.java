@@ -1,9 +1,7 @@
 package gov.usgs.wma.waterdata;
 
-
 import java.sql.Date;
 import java.util.Objects;
-
 
 public class TimeSeries {
 	String groundwaterDailyValueIdentifier;

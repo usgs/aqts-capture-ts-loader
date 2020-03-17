@@ -29,9 +29,10 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
-		classes={DBTestConfig.class, TransformDao.class})
+		classes={
+			DBTestConfig.class,
+			TransformDao.class})
 @DatabaseSetup("classpath:/testData/transformDb/groundwaterStatisticalDailyValue/")
-
 @ActiveProfiles("it")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
