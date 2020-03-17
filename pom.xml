@@ -268,14 +268,14 @@
                         <!-- Transform db image -->
                         <image>
                             <name>usgswma/aqts_capture_db:ci</name>
-                            <alias>${AQTS_TESTING_DATABASE_ADDRESS}</alias>
+                            <alias>${TRANSFORM_TESTING_DATABASE_ADDRESS}</alias>
                             <run>
                                 <network>
                                     <mode>custom</mode>
-                                    <name>${AQTS_TESTING_DATABASE_NETWORK}</name>
+                                    <name>${TRANSFORM_TESTING_DATABASE_NETWORK}</name>
                                 </network>
                                 <ports>
-                                    <port>${AQTS_TESTING_DATABASE_PORT}</port>
+                                    <port>${TRANSFORM_TESTING_DATABASE_PORT}</port>
                                 </ports>
                                 <wait>
                                     <time>150000</time>
@@ -290,7 +290,7 @@
                             <run>
                                 <network>
                                     <mode>custom</mode>
-                                    <name>${AQTS_TESTING_DATABASE_NETWORK}</name>
+                                    <name>${TRANSFORM_TESTING_DATABASE_NETWORK}</name>
                                 </network>
                                 <ports>
                                     <port>${OBSERVATION_TESTING_DATABASE_PORT}</port>
