@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -118,5 +119,12 @@ public class TransformDaoIT {
 		assertEquals(timeSeriesList, actualData);
 	}
 
-
+	@Test
+	public void testNotFound() {
+		// try to get data using a bad unique id
+		List<TimeSeries> expectedTimeSeriesList = new ArrayList();
+		request.setUniqueId("badTimeSeriesUniqueId");
+		List<TimeSeries> actualData = transformDao.getTimeSeries(request.getUniqueId());
+		assertEquals(expectedTimeSeriesList, actualData);
+	}
 }

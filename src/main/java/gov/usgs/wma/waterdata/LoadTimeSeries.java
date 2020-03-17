@@ -34,15 +34,15 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 		if (null != timeSeriesUniqueId) {
 
-			// select the time series from the transform db
+			// get time series from transform db
 			List<TimeSeries> timeSeries = transformDao.getTimeSeries(timeSeriesUniqueId);
 
-			// delete the existing time series, if any, from the observation db
+			// delete existing time series from observation db
 			observationDao.deleteTimeSeries(timeSeriesUniqueId);
 
 			Integer count = 0;
 			for (TimeSeries ts : timeSeries) {
-				// insert the time series into the observation db
+				// insert time series into observation db
 				count += observationDao.insertTimeSeries(ts);
 			}
 			result.setCount(count);

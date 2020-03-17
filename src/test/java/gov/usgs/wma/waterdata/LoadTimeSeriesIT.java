@@ -41,9 +41,7 @@ import org.springframework.util.LinkedCaseInsensitiveMap;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, LoadTimeSeries.class, TransformDao.class, ObservationDao.class})
-//		classes={DBTestConfig.class, ObservationDao.class})
 
-//@DatabaseSetup("classpath:/testData/transformDb/groundwaterStatisticalDailyValue/")
 
 @ActiveProfiles("it")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
@@ -87,6 +85,28 @@ public class LoadTimeSeriesIT {
 
 		ResultObject actualInsert = loadTimeSeries.processRequest(request);
 		Integer expectedCount = 3;
+		String expectedStatus = "success";
 		assertEquals(expectedCount, actualInsert.getCount());
+		assertEquals(expectedStatus, actualInsert.getStatus());
+	}
+
+	@Test
+	@DatabaseSetup(
+			connection="transform",
+			value="classpath:/testData/transformDb/groundwaterStatisticalDailyValue/")
+	@DatabaseSetup(
+			connection="observation",
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/")
+	@ExpectedDatabase(
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/",
+			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED,
+			connection="observation")
+	public void testNotFound() {
+		request.setUniqueId("badTimeSeriesUniqueId");
+		ResultObject actualInsert = loadTimeSeries.processRequest(request);
+		Integer expectedCount = 0;
+		String expectedStatus = "success";
+		assertEquals(expectedCount, actualInsert.getCount());
+		assertEquals(expectedStatus, actualInsert.getStatus());
 	}
 }
