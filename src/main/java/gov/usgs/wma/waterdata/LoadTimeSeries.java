@@ -13,6 +13,9 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LoadTimeSeries.class);
 
+	public static final String STATUS_SUCCESS = "success";
+	public static final String STATUS_FAIL = "fail";
+
 	private TransformDao transformDao;
 	private ObservationDao observationDao;
 
@@ -47,13 +50,15 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 			}
 			result.setCount(count);
 
-			if (count == timeSeries.size()) {
-				result.setStatus("success");
+			if (count == timeSeries.size() && count != 0) {
+				result.setStatus(STATUS_SUCCESS);
 				LOG.debug("Successfully inserted time series with unique id: {} ", timeSeriesUniqueId);
 			} else {
-				result.setStatus("fail");
-				LOG.debug("Selected row count: {} and inserted row count: {} differ.", timeSeries.size(), count);
+				result.setStatus(STATUS_FAIL);
+				LOG.debug("Selected row count: {} and inserted row count: {} differ or no records were found.", timeSeries.size(), count);
 			}
+		} else {
+			result.setStatus(STATUS_FAIL);
 		}
 		return result;
 	}

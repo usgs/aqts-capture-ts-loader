@@ -22,8 +22,8 @@ public class DbConfig {
 	}
 
 	@Bean
+	@ConfigurationProperties(prefix="spring.datasource-transform")
 	@Primary
-	@Profile("default")
 	public DataSource dataSourceTransform() {
 		return dataSourcePropertiesTransform().initializeDataSourceBuilder().build();
 	}
@@ -41,6 +41,7 @@ public class DbConfig {
 	}
 
 	@Bean
+	@ConfigurationProperties(prefix="spring.datasource-observation")
 	public DataSource dataSourceObservation() {
 		return dataSourceObservationProperties().initializeDataSourceBuilder().build();
 	}
