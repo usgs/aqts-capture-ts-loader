@@ -45,7 +45,7 @@ public class LoadTimeSeriesTest {
 		when(observationDao.insertTimeSeries(any())).thenReturn(0);
 		ResultObject result = loadTimeSeries.apply(request);
 		assertNotNull(result);
-		Integer expectedRowsInsertedCount = 0;
+		Integer expectedRowsInsertedCount = null;
 		assertEquals(expectedRowsInsertedCount, result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
 	}

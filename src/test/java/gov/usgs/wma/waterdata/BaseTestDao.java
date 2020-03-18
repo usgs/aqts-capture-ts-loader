@@ -1,13 +1,10 @@
 package gov.usgs.wma.waterdata;
 
 import java.sql.Date;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestExecutionListeners;
@@ -20,19 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 
-@SpringBootTest(webEnvironment=WebEnvironment.NONE,
-		classes={
-			DBTestConfig.class,
-			LoadTimeSeries.class,
-			TransformDao.class,
-			ObservationDao.class})
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
 		TransactionDbUnitTestExecutionListener.class })
 @DbUnitConfiguration(
 		dataSetLoader=FileSensingDataSetLoader.class,
-		databaseConnection={"transform", "observation"})
+		databaseConnection={
+			"transform",
+			"observation"})
 @AutoConfigureTestDatabase(replace=Replace.NONE)
 @Transactional(propagation=Propagation.NOT_SUPPORTED)
 @Import({DBTestConfig.class})

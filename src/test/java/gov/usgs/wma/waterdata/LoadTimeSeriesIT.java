@@ -6,9 +6,16 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.NONE,
+		classes={
+			DBTestConfig.class,
+			LoadTimeSeries.class,
+			TransformDao.class,
+			ObservationDao.class})
 @DatabaseSetup(
 		connection="transform",
 		value="classpath:/testData/transformDb/groundwaterStatisticalDailyValue/")
@@ -42,7 +49,7 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 	public void testNotFound() {
 		request.setUniqueId("badTimeSeriesUniqueId");
 		ResultObject actualInsert = loadTimeSeries.processRequest(request);
-		Integer expectedCount = 0;
+		Integer expectedCount = null;
 		assertEquals(expectedCount, actualInsert.getCount());
 		assertEquals(LoadTimeSeries.STATUS_FAIL, actualInsert.getStatus());
 	}

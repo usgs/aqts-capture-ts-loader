@@ -35,31 +35,44 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 		String timeSeriesUniqueId = request.getUniqueId();
 		ResultObject result = new ResultObject();
 
+		// don't interact with the databases if the incoming time series unique id is null
 		if (null != timeSeriesUniqueId) {
 
 			// get time series from transform db
-			List<TimeSeries> timeSeries = transformDao.getTimeSeries(timeSeriesUniqueId);
+			List<TimeSeries> timeSeriesList = transformDao.getTimeSeries(timeSeriesUniqueId);
 
-			// delete existing time series from observation db
-			observationDao.deleteTimeSeries(timeSeriesUniqueId);
-
-			Integer count = 0;
-			for (TimeSeries ts : timeSeries) {
-				// insert time series into observation db
-				count += observationDao.insertTimeSeries(ts);
-			}
-			result.setCount(count);
-
-			if (count == timeSeries.size() && count != 0) {
-				result.setStatus(STATUS_SUCCESS);
-				LOG.debug("Successfully inserted time series with unique id: {} ", timeSeriesUniqueId);
+			if (0 == timeSeriesList.size()) {
+				// do not try to delete or insert rows if no data is returned from the get
+				result.setStatus(LoadTimeSeries.STATUS_FAIL);
+				LOG.debug("No records found for time series unique id: {}", timeSeriesUniqueId);
 			} else {
-				result.setStatus(STATUS_FAIL);
-				LOG.debug("Selected row count: {} and inserted row count: {} differ or no records were found.", timeSeries.size(), count);
+				// otherwise, try to insert new time series or replace existing ones
+				loadTimeSeriesIntoObservationDb(timeSeriesList, result, timeSeriesUniqueId);
 			}
 		} else {
 			result.setStatus(STATUS_FAIL);
+			LOG.debug("Time series unique id was null");
 		}
 		return result;
+	}
+
+	public void loadTimeSeriesIntoObservationDb (List<TimeSeries> timeSeriesList, ResultObject result, String timeSeriesUniqueId) {
+		// first delete existing time series from observation db
+		observationDao.deleteTimeSeries(timeSeriesUniqueId);
+
+		Integer count = 0;
+		for (TimeSeries ts : timeSeriesList) {
+			// insert time series into observation db
+			count += observationDao.insertTimeSeries(ts);
+		}
+		result.setCount(count);
+
+		if (count == timeSeriesList.size() && count != 0) {
+			result.setStatus(STATUS_SUCCESS);
+			LOG.debug("Successfully inserted time series with unique id: {} ", timeSeriesUniqueId);
+		} else {
+			result.setStatus(STATUS_FAIL);
+			LOG.debug("Selected row count: {} and inserted row count: {} differ, insert failed.", timeSeriesList.size(), count);
+		}
 	}
 }
