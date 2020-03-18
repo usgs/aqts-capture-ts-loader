@@ -262,7 +262,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!--                     <showLogs>true</showLogs> -->
+                    <!--<showLogs>true</showLogs> -->
                     <containerNamePattern>%a</containerNamePattern>
                     <images>
                         <!-- Transform db image -->
@@ -275,7 +275,7 @@
                                     <name>${TRANSFORM_TESTING_DATABASE_NETWORK}</name>
                                 </network>
                                 <ports>
-                                    <port>${TRANSFORM_TESTING_DATABASE_PORT}</port>
+                                    <port>${TRANSFORM_TESTING_DATABASE_PORT}:5432</port>
                                 </ports>
                                 <wait>
                                     <time>150000</time>
@@ -290,10 +290,10 @@
                             <run>
                                 <network>
                                     <mode>custom</mode>
-                                    <name>${TRANSFORM_TESTING_DATABASE_NETWORK}</name>
+                                    <name>${OBSERVATION_TESTING_DATABASE_NETWORK}</name>
                                 </network>
                                 <ports>
-                                    <port>${OBSERVATION_TESTING_DATABASE_PORT}</port>
+                                    <port>${OBSERVATION_TESTING_DATABASE_PORT}:5432</port>
                                 </ports>
                                 <wait>
                                     <time>150000</time>

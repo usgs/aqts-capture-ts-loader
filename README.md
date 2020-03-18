@@ -25,12 +25,13 @@ mvn package
 ### Database Integration Testing
 To additionally start up both the transform and observation Docker databases and run the integration tests of the application use:
 
+Note: the below maven command does not work 
 ```.sh
 mvn verify \
     -DTRANSFORM_TESTING_DATABASE_PORT=5437 \
     -DTRANSFORM_TESTING_DATABASE_ADDRESS=localhost \
     -DTRANSFORM_TESTING_DATABASE_NETWORK=aqts \
     -DOBSERVATION_TESTING_DATABASE_PORT=5444 \
-    -DOBSERVATION_TESTING_DATABASE_ADDRESS=localhost \
+    -DOBSERVATION_TESTING_DATABASE_ADDRESS=127.0.0.1 \
     -DOBSERVATION_TESTING_DATABASE_NETWORK=aqts
 ```
