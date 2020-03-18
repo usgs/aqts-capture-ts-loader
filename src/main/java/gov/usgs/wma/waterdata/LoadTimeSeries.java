@@ -56,6 +56,12 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 		return result;
 	}
 
+	/**
+	 * Inserts or replaces time series into the observation database.
+	 * @param timeSeriesList the list of time series returned from the transform db
+	 * @param result the status and count of inserted records
+	 * @param timeSeriesUniqueId the unique id used to filter records for the get and the delete.
+	 */
 	public void loadTimeSeriesIntoObservationDb (List<TimeSeries> timeSeriesList, ResultObject result, String timeSeriesUniqueId) {
 		// first delete existing time series from observation db
 		observationDao.deleteTimeSeries(timeSeriesUniqueId);
