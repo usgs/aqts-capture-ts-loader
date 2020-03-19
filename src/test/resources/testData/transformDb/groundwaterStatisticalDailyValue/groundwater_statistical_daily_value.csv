@@ -1,0 +1,4 @@
+groundwater_statistical_daily_value_id,groundwater_daily_value_identifier,time_series_unique_id,monitoring_location_identifier,observered_property_id,statistic_id,time_step,unit_of_measure,result,approvals,qualifiers,grades
+"1","USGS-132624144452771-17f83e62b06e4dc29e78d96b4426a255","17f83e62b06e4dc29e78d96b4426a255","USGS-132624144452771",62610,00001,"2008-06-03","ft","36.02","[\"Approved\"]",null,"[\"50\"]"
+"2","USGS-132624144452771-17f83e62b06e4dc29e78d96b4426a255","17f83e62b06e4dc29e78d96b4426a255","USGS-132624144452771",62610,00001,"2008-06-04","ft","35.96","[\"Approved\"]",null,"[\"50\"]"
+"3","USGS-132624144452771-17f83e62b06e4dc29e78d96b4426a255","17f83e62b06e4dc29e78d96b4426a255","USGS-132624144452771",62610,00001,"2008-06-05","ft","35.91","[\"Approved\"]",null,"[\"50\"]"
