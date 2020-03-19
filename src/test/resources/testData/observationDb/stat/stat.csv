@@ -1,0 +1,4 @@
+"stat_cd","dv_valid_fg","uv_valid_fg","stat_nm","stat_ds"
+"00001",True,True,"MAXIMUM","MAXIMUM VALUES"
+"00002",True,True,"MINIMUM","MINIMUM VALUES"
+"00003",True,True,"MEAN","MEAN VALUES"
