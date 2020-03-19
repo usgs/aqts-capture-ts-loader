@@ -25,7 +25,7 @@ pipeline {
                 sh '''
                 curl ${SHADED_JAR_ARTIFACT_URL} -Lo aqts-capture-ts-loader-aws.jar
                 ls -al
-                npm install serverless
+                npm install
                 ls -al
                 ./node_modules/serverless/bin/serverless deploy --stage ${DEPLOY_STAGE} --taggingVersion ${SHADED_JAR_VERSION}
                 '''
