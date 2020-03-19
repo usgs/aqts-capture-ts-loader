@@ -26,7 +26,7 @@ script:
     -e TESTING_DATABASE_NETWORK=aqtsNet \
     -e OBSERVATION_TESTING_DATABASE_PORT=5432 \
     -e LOCAL_OBSERVATION_TESTING_DATABASE_PORT=5444 \
-    -e OBSERVATION_TESTING_DATABASE_ADDRESS=wqpDb
+    -e OBSERVATION_TESTING_DATABASE_ADDRESS=wqpDb \
     maven:3.6.0-jdk-11 mvn clean verify \
   - docker network rm aqtsNet
 
