@@ -24,7 +24,7 @@ insert into
 values (
 	?
 	,?
-	,NULL /*(select monitoring_location_id from monitoring_location where monitoring_location_identifier = ?)*/
+	,(select monitoring_location_id from monitoring_location where monitoring_location_identifier = ?)
 	,?
 	,?
 	,NULL

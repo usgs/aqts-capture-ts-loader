@@ -60,14 +60,15 @@ public class ObservationDao {
 							ps.setString(1, timeSeries.getGroundwaterDailyValueIdentifier());
 							ps.setString(2, timeSeries.getTimeSeriesUniqueId());
 							ps.setString(3, timeSeries.getMonitoringLocationIdentifier());
-							ps.setString(4, timeSeries.getObservedPropertyId());
-							ps.setString(5, timeSeries.getStatisticId());
-							ps.setDate(6, timeSeries.getTimeStep());
-							ps.setString(7, timeSeries.getUnitOfMeasure());
-							ps.setString(8, timeSeries.getResult());
-							ps.setString(9, timeSeries.getApprovals());
-							ps.setString(10, timeSeries.getQualifiers());
-							ps.setString(11, timeSeries.getGrades());
+							ps.setString(4, timeSeries.getMonitoringLocationIdentifier());
+							ps.setString(5, timeSeries.getObservedPropertyId());
+							ps.setString(6, timeSeries.getStatisticId());
+							ps.setDate(7, timeSeries.getTimeStep());
+							ps.setString(8, timeSeries.getUnitOfMeasure());
+							ps.setString(9, timeSeries.getResult());
+							ps.setString(10, timeSeries.getApprovals());
+							ps.setString(11, timeSeries.getQualifiers());
+							ps.setString(12, timeSeries.getGrades());
 						}
 					}
 			);
