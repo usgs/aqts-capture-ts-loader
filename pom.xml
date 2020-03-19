@@ -196,6 +196,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <!--Here for spring application.yml validation purposes only-->
                 <configuration>
                     <environmentVariables>
                         <TRANSFORM_DATABASE_ADDRESS>${TRANSFORM_TESTING_DATABASE_ADDRESS}</TRANSFORM_DATABASE_ADDRESS>
@@ -216,6 +217,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <!--
+                    Here for src/test/resources spring application.yml
+                    This configuration must contain the same environment variables that
+                    are required to run the deployed application.  In this case - the env vars
+                    are listed in the serverless.yml file, and pulled in via AWS Secrets Manager,
+                    AWS paramater store, or gitlab via the ecs deployment pipeline
+                 -->
                 <configuration>
                     <environmentVariables>
                         <TRANSFORM_DATABASE_ADDRESS>${TRANSFORM_TESTING_DATABASE_ADDRESS}</TRANSFORM_DATABASE_ADDRESS>
@@ -264,6 +272,7 @@
                 <configuration>
                     <!--<showLogs>true</showLogs> -->
                     <containerNamePattern>%a</containerNamePattern>
+                    <!--Setting up the docker containers -->
                     <images>
                         <!-- Transform db image -->
                         <image>
@@ -272,10 +281,10 @@
                             <run>
                                 <network>
                                     <mode>custom</mode>
-                                    <name>${TRANSFORM_TESTING_DATABASE_NETWORK}</name>
+                                    <name>${TESTING_DATABASE_NETWORK}</name>
                                 </network>
                                 <ports>
-                                    <port>${TRANSFORM_TESTING_DATABASE_PORT}:5432</port>
+                                    <port>${LOCAL_TRANSFORM_TESTING_DATABASE_PORT}:5432</port>
                                 </ports>
                                 <wait>
                                     <time>150000</time>
@@ -290,10 +299,10 @@
                             <run>
                                 <network>
                                     <mode>custom</mode>
-                                    <name>${OBSERVATION_TESTING_DATABASE_NETWORK}</name>
+                                    <name>${TESTING_DATABASE_NETWORK}</name>
                                 </network>
                                 <ports>
-                                    <port>${OBSERVATION_TESTING_DATABASE_PORT}:5432</port>
+                                    <port>${LOCAL_OBSERVATION_TESTING_DATABASE_PORT}:5432</port>
                                 </ports>
                                 <wait>
                                     <time>150000</time>
