@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import javax.naming.spi.DirStateFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +41,11 @@ public class LoadTimeSeriesTest {
 	public void testNullId() {
 		request.setUniqueId(null);
 		ResultObject result = loadTimeSeries.processRequest(request);
+
+		assertNotNull(result);
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
 		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NULL_UNIQUE_ID, result.getFailMessage());
 		assertEquals(null, result.getCount());
-		// throws exception
 		assertThrows(RuntimeException.class, () -> {
 			loadTimeSeries.apply(request);
 		}, "should have thrown an exception but did not");
@@ -55,15 +55,12 @@ public class LoadTimeSeriesTest {
 	public void testNoRecordsFound() {
 		// no time series data found
 		when(transformDao.getTimeSeries(anyString())).thenReturn(genericTimeSeriesList);
-		// nothing is deleted
-		when(observationDao.deleteTimeSeries(anyString())).thenReturn(0);
-		// nothing is inserted
-		when(observationDao.insertTimeSeries(any())).thenReturn(0);
 		ResultObject result = loadTimeSeries.processRequest(request);
+
+		assertNotNull(result);
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
 		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, result.getFailMessage());
-		assertNotEquals(genericTimeSeriesList.size(), result.getCount());
-		// throws exception
+		assertEquals(null, result.getCount());
 		assertThrows(RuntimeException.class, () -> {
 			loadTimeSeries.apply(request);
 		}, "should have thrown an exception but did not");
@@ -71,7 +68,6 @@ public class LoadTimeSeriesTest {
 
 	@Test
 	public void testFoundGenericFailedInsert() {
-		// path to the dark side
 		genericTimeSeriesList.add(genericTimeSeries1);
 		genericTimeSeriesList.add(genericTimeSeries2);
 		when(transformDao.getTimeSeries(anyString())).thenReturn(genericTimeSeriesList);
@@ -80,9 +76,11 @@ public class LoadTimeSeriesTest {
 		// insert fails
 		when(observationDao.insertTimeSeries(any())).thenReturn(0);
 		ResultObject result = loadTimeSeries.processRequest(request);
+
+		assertNotNull(result);
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
 		assertEquals(LoadTimeSeries.FAIL_MESSAGE_INSERT_FAILED, result.getFailMessage());
-		assertNotEquals(genericTimeSeriesList.size(), result.getCount());
+		assertEquals(0, result.getCount());
 		// throws exception
 		assertThrows(RuntimeException.class, () -> {
 			loadTimeSeries.apply(request);
@@ -94,13 +92,14 @@ public class LoadTimeSeriesTest {
 	public void testFoundGeneric() {
 		genericTimeSeriesList.add(genericTimeSeries1);
 		genericTimeSeriesList.add(genericTimeSeries2);
-		// happy path - 2 time series returned
+		// 2 time series returned
 		when(transformDao.getTimeSeries(anyString())).thenReturn(genericTimeSeriesList);
 		// delete succeeds
 		when(observationDao.deleteTimeSeries(anyString())).thenReturn(2);
 		// insert succeeds
 		when(observationDao.insertTimeSeries(any())).thenReturn(1);
 		ResultObject result = loadTimeSeries.apply(request);
+
 		assertNotNull(result);
 		assertEquals(genericTimeSeriesList.size(), result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
@@ -118,6 +117,7 @@ public class LoadTimeSeriesTest {
 		// insert succeeds
 		when(observationDao.insertTimeSeries(any())).thenReturn(1);
 		ResultObject result = loadTimeSeries.apply(request);
+
 		assertNotNull(result);
 		assertEquals(genericTimeSeriesList.size(), result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());

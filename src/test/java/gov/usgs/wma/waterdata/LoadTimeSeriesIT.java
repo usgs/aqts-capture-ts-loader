@@ -42,6 +42,7 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 		Integer expectedCount = 3;
 		assertEquals(expectedCount, actualInsert.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, actualInsert.getStatus());
+		assertEquals(null, actualInsert.getFailMessage());
 	}
 
 	@Test
@@ -49,11 +50,26 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/",
 			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED,
 			connection="observation")
-	public void testNotFound() {
+	public void testNoRecordsFound() {
 		request.setUniqueId("badTimeSeriesUniqueId");
 		ResultObject actualInsert = loadTimeSeries.processRequest(request);
 		Integer expectedCount = null;
 		assertEquals(expectedCount, actualInsert.getCount());
 		assertEquals(LoadTimeSeries.STATUS_FAIL, actualInsert.getStatus());
+		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, actualInsert.getFailMessage());
+	}
+
+	@Test
+	@ExpectedDatabase(
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/",
+			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED,
+			connection="observation")
+	public void testNullUniqueId() {
+		request.setUniqueId(null);
+		ResultObject actualInsert = loadTimeSeries.processRequest(request);
+		Integer expectedCount = null;
+		assertEquals(expectedCount, actualInsert.getCount());
+		assertEquals(LoadTimeSeries.STATUS_FAIL, actualInsert.getStatus());
+		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NULL_UNIQUE_ID, actualInsert.getFailMessage());
 	}
 }
