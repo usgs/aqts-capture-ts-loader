@@ -1,8 +1,5 @@
 package gov.usgs.wma.waterdata;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import org.junit.jupiter.api.Test;
@@ -10,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.NONE,
 		classes={
@@ -43,7 +42,7 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 		Integer expectedCount = 3;
 		assertEquals(expectedCount, result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
-		assertEquals(null, result.getFailMessage());
+		assertNull(result.getFailMessage());
 	}
 
 	@Test
@@ -60,7 +59,7 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 		Integer expectedCount = 3;
 		assertEquals(expectedCount, result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
-		assertEquals(null, result.getFailMessage());
+		assertNull(result.getFailMessage());
 	}
 
 	@Test
@@ -74,8 +73,7 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 	public void testNoRecordsFound() {
 		request.setUniqueId("badTimeSeriesUniqueId");
 		ResultObject result = loadTimeSeries.processRequest(request);
-		Integer expectedCount = null;
-		assertEquals(expectedCount, result.getCount());
+		assertNull(result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
 		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, result.getFailMessage());
 		assertThrows(RuntimeException.class, () -> {
@@ -94,8 +92,7 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 	public void testNullUniqueId() {
 		request.setUniqueId(null);
 		ResultObject result = loadTimeSeries.processRequest(request);
-		Integer expectedCount = null;
-		assertEquals(expectedCount, result.getCount());
+		assertNull(result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
 		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NULL_UNIQUE_ID, result.getFailMessage());
 		assertThrows(RuntimeException.class, () -> {

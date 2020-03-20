@@ -45,7 +45,7 @@ public class LoadTimeSeriesTest {
 		assertNotNull(result);
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
 		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NULL_UNIQUE_ID, result.getFailMessage());
-		assertEquals(null, result.getCount());
+		assertNull(result.getCount());
 		assertThrows(RuntimeException.class, () -> {
 			loadTimeSeries.apply(request);
 		}, "should have thrown an exception but did not");
@@ -60,7 +60,7 @@ public class LoadTimeSeriesTest {
 		assertNotNull(result);
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
 		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, result.getFailMessage());
-		assertEquals(null, result.getCount());
+		assertNull(result.getCount());
 		assertThrows(RuntimeException.class, () -> {
 			loadTimeSeries.apply(request);
 		}, "should have thrown an exception but did not");
@@ -103,7 +103,7 @@ public class LoadTimeSeriesTest {
 		assertNotNull(result);
 		assertEquals(genericTimeSeriesList.size(), result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
-		assertEquals(null, result.getFailMessage());
+		assertNull(result.getFailMessage());
 	}
 
 	@Test
@@ -121,6 +121,6 @@ public class LoadTimeSeriesTest {
 		assertNotNull(result);
 		assertEquals(genericTimeSeriesList.size(), result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
-		assertEquals(null, result.getFailMessage());
+		assertNull(result.getFailMessage());
 	}
 }
