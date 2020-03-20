@@ -5,8 +5,8 @@ insert into
 	,time_series_unique_id
 	,monitoring_location_id
 	,monitoring_location_identifier
-	,observered_property_id -- parm_cd in parm table
-	,observered_property_name -- parm_nm in parm table
+	,observered_property_id
+	,observered_property_name
 	,observered_property_reference
 	,statistic_id
 	,statistic
@@ -27,11 +27,11 @@ values (
 	,(select monitoring_location_id from monitoring_location where monitoring_location_identifier = ?)
 	,?
 	,?
-	,NULL
-	,NULL
+	,(select parm_nm from parm where parm_cd = ?)
+	,(select parm_ds from parm where parm_cd = ?)
 	,?
-	,NULL
-	,NULL
+	,(select stat_nm from stat where stat_cd = ?)
+	,(select stat_ds from stat where stat_cd = ?)
 	,?
 	,NULL
 	,?

@@ -62,13 +62,17 @@ public class ObservationDao {
 							ps.setString(3, timeSeries.getMonitoringLocationIdentifier());
 							ps.setString(4, timeSeries.getMonitoringLocationIdentifier());
 							ps.setString(5, timeSeries.getObservedPropertyId());
-							ps.setString(6, timeSeries.getStatisticId());
-							ps.setDate(7, timeSeries.getTimeStep());
-							ps.setString(8, timeSeries.getUnitOfMeasure());
-							ps.setString(9, timeSeries.getResult());
-							ps.setString(10, timeSeries.getApprovals());
-							ps.setString(11, timeSeries.getQualifiers());
-							ps.setString(12, timeSeries.getGrades());
+							ps.setString(6, timeSeries.getObservedPropertyId());
+							ps.setString(7, timeSeries.getObservedPropertyId());
+							ps.setString(8, timeSeries.getStatisticId());
+							ps.setString(9, timeSeries.getStatisticId());
+							ps.setString(10, timeSeries.getStatisticId());
+							ps.setDate(11, timeSeries.getTimeStep());
+							ps.setString(12, timeSeries.getUnitOfMeasure());
+							ps.setString(13, timeSeries.getResult());
+							ps.setString(14, timeSeries.getApprovals());
+							ps.setString(15, timeSeries.getQualifiers());
+							ps.setString(16, timeSeries.getGrades());
 						}
 					}
 			);

@@ -18,7 +18,10 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 			ObservationDao.class})
 @DatabaseSetup(
 		connection="transform",
-		value="classpath:/testData/transformDb/groundwaterStatisticalDailyValue/")
+		value="classpath:/testData/transformDb/")
+@DatabaseSetup(
+		connection="observation",
+		value="classpath:/testData/observationDb/")
 @DatabaseSetup(
 		connection="observation",
 		value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/")

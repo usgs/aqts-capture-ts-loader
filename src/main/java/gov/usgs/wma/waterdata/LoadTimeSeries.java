@@ -15,6 +15,9 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 	public static final String STATUS_SUCCESS = "success";
 	public static final String STATUS_FAIL = "fail";
+	public static final String FAIL_MESSAGE_NO_RECORDS = "No records found";
+	public static final String FAIL_MESSAGE_NULL_UNIQUE_ID = "Time series unique id was null";
+	public static final String FAIL_MESSAGE_INSERT_FAILED = "Selected row count and inserted row count differ, insert failed";
 
 	private TransformDao transformDao;
 	private ObservationDao observationDao;
@@ -27,7 +30,12 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 	@Override
 	public  ResultObject apply(RequestObject request) {
-		return processRequest(request);
+		ResultObject result = processRequest(request);
+		if (STATUS_FAIL == result.getStatus()) {
+			throw new RuntimeException(result.getFailMessage());
+		} else {
+			return result;
+		}
 	}
 
 	protected ResultObject processRequest(RequestObject request) {
@@ -43,7 +51,8 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 			if (0 == timeSeriesList.size()) {
 				// do not try to delete or insert rows if no data is returned from the get
-				result.setStatus(LoadTimeSeries.STATUS_FAIL);
+				result.setStatus(STATUS_FAIL);
+				result.setFailMessage(FAIL_MESSAGE_NO_RECORDS);
 				LOG.debug("No records found for time series unique id: {}", timeSeriesUniqueId);
 			} else {
 				// otherwise, try to insert new time series or replace existing ones
@@ -51,7 +60,8 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 			}
 		} else {
 			result.setStatus(STATUS_FAIL);
-			LOG.debug("Time series unique id was null");
+			result.setFailMessage(FAIL_MESSAGE_NULL_UNIQUE_ID);
+			LOG.debug(FAIL_MESSAGE_NULL_UNIQUE_ID);
 		}
 		return result;
 	}
@@ -78,7 +88,8 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 			LOG.debug("Successfully inserted time series with unique id: {} ", timeSeriesUniqueId);
 		} else {
 			result.setStatus(STATUS_FAIL);
-			LOG.debug("Selected row count: {} and inserted row count: {} differ, insert failed.", timeSeriesList.size(), count);
+			result.setFailMessage(FAIL_MESSAGE_INSERT_FAILED);
+			LOG.debug("Selected row count: {} and inserted row count: {} differ, insert failed", timeSeriesList.size(), count);
 		}
 	}
 }

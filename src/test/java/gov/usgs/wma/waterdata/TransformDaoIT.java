@@ -15,7 +15,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 		classes={
 			DBTestConfig.class,
 			TransformDao.class})
-@DatabaseSetup("classpath:/testData/transformDb/groundwaterStatisticalDailyValue/")
+@DatabaseSetup("classpath:/testData/transformDb/")
 @ActiveProfiles("it")
 public class TransformDaoIT extends BaseTestDao {
 

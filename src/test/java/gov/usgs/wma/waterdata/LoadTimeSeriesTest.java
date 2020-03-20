@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import javax.naming.spi.DirStateFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,21 +37,59 @@ public class LoadTimeSeriesTest {
 		genericTimeSeries2 = new TimeSeries();
 	}
 
+	// tests for fails
 	@Test
-	public void testNotFound() {
+	public void testNullId() {
+		request.setUniqueId(null);
+		ResultObject result = loadTimeSeries.processRequest(request);
+		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
+		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NULL_UNIQUE_ID, result.getFailMessage());
+		assertEquals(null, result.getCount());
+		// throws exception
+		assertThrows(RuntimeException.class, () -> {
+			loadTimeSeries.apply(request);
+		}, "should have thrown an exception but did not");
+	}
+
+	@Test
+	public void testNoRecordsFound() {
 		// no time series data found
 		when(transformDao.getTimeSeries(anyString())).thenReturn(genericTimeSeriesList);
 		// nothing is deleted
 		when(observationDao.deleteTimeSeries(anyString())).thenReturn(0);
 		// nothing is inserted
 		when(observationDao.insertTimeSeries(any())).thenReturn(0);
-		ResultObject result = loadTimeSeries.apply(request);
-		assertNotNull(result);
-		Integer expectedRowsInsertedCount = null;
-		assertEquals(expectedRowsInsertedCount, result.getCount());
+		ResultObject result = loadTimeSeries.processRequest(request);
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
+		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, result.getFailMessage());
+		assertNotEquals(genericTimeSeriesList.size(), result.getCount());
+		// throws exception
+		assertThrows(RuntimeException.class, () -> {
+			loadTimeSeries.apply(request);
+		}, "should have thrown an exception but did not");
 	}
 
+	@Test
+	public void testFoundGenericFailedInsert() {
+		// path to the dark side
+		genericTimeSeriesList.add(genericTimeSeries1);
+		genericTimeSeriesList.add(genericTimeSeries2);
+		when(transformDao.getTimeSeries(anyString())).thenReturn(genericTimeSeriesList);
+		// delete succeeds
+		when(observationDao.deleteTimeSeries(anyString())).thenReturn(2);
+		// insert fails
+		when(observationDao.insertTimeSeries(any())).thenReturn(0);
+		ResultObject result = loadTimeSeries.processRequest(request);
+		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
+		assertEquals(LoadTimeSeries.FAIL_MESSAGE_INSERT_FAILED, result.getFailMessage());
+		assertNotEquals(genericTimeSeriesList.size(), result.getCount());
+		// throws exception
+		assertThrows(RuntimeException.class, () -> {
+			loadTimeSeries.apply(request);
+		}, "should have thrown an exception but did not");
+	}
+
+	// tests for successes
 	@Test
 	public void testFoundGeneric() {
 		genericTimeSeriesList.add(genericTimeSeries1);
@@ -64,6 +104,7 @@ public class LoadTimeSeriesTest {
 		assertNotNull(result);
 		assertEquals(genericTimeSeriesList.size(), result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
+		assertEquals(null, result.getFailMessage());
 	}
 
 	@Test
@@ -80,21 +121,6 @@ public class LoadTimeSeriesTest {
 		assertNotNull(result);
 		assertEquals(genericTimeSeriesList.size(), result.getCount());
 		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
-	}
-
-	@Test
-	public void testFoundGenericFailedInsert() {
-		// path to the dark side
-		genericTimeSeriesList.add(genericTimeSeries1);
-		genericTimeSeriesList.add(genericTimeSeries2);
-		when(transformDao.getTimeSeries(anyString())).thenReturn(genericTimeSeriesList);
-		// delete succeeds
-		when(observationDao.deleteTimeSeries(anyString())).thenReturn(2);
-		// insert fails
-		when(observationDao.insertTimeSeries(any())).thenReturn(0);
-		ResultObject result = loadTimeSeries.apply(request);
-		assertNotNull(result);
-		assertNotEquals(genericTimeSeriesList.size(), result.getCount());
-		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
+		assertEquals(null, result.getFailMessage());
 	}
 }
