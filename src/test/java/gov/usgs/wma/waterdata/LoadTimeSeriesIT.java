@@ -1,6 +1,7 @@
 package gov.usgs.wma.waterdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
@@ -22,9 +23,6 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 @DatabaseSetup(
 		connection="observation",
 		value="classpath:/testData/observationDb/")
-@DatabaseSetup(
-		connection="observation",
-		value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/")
 @ActiveProfiles("it")
 public class LoadTimeSeriesIT extends BaseTestDao {
 
@@ -32,44 +30,76 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 	public LoadTimeSeries loadTimeSeries;
 
 	@Test
+	@DatabaseSetup(
+			connection="observation",
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/")
 	@ExpectedDatabase(
 			value="classpath:/testResult/observationDb/groundwaterDailyValue/afterInsert/",
 			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED,
 			connection="observation")
-	public void testLoadTimeSeries() {
+	public void testInsert() {
 
-		ResultObject actualInsert = loadTimeSeries.processRequest(request);
+		ResultObject result = loadTimeSeries.processRequest(request);
 		Integer expectedCount = 3;
-		assertEquals(expectedCount, actualInsert.getCount());
-		assertEquals(LoadTimeSeries.STATUS_SUCCESS, actualInsert.getStatus());
-		assertEquals(null, actualInsert.getFailMessage());
+		assertEquals(expectedCount, result.getCount());
+		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
+		assertEquals(null, result.getFailMessage());
 	}
 
 	@Test
+	@DatabaseSetup(
+			connection="observation",
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/afterInsert/")
+	@ExpectedDatabase(
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/afterInsert/",
+			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED,
+			connection="observation")
+	public void testReplace() {
+
+		ResultObject result = loadTimeSeries.processRequest(request);
+		Integer expectedCount = 3;
+		assertEquals(expectedCount, result.getCount());
+		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
+		assertEquals(null, result.getFailMessage());
+	}
+
+	@Test
+	@DatabaseSetup(
+			connection="observation",
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/")
 	@ExpectedDatabase(
 			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/",
 			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED,
 			connection="observation")
 	public void testNoRecordsFound() {
 		request.setUniqueId("badTimeSeriesUniqueId");
-		ResultObject actualInsert = loadTimeSeries.processRequest(request);
+		ResultObject result = loadTimeSeries.processRequest(request);
 		Integer expectedCount = null;
-		assertEquals(expectedCount, actualInsert.getCount());
-		assertEquals(LoadTimeSeries.STATUS_FAIL, actualInsert.getStatus());
-		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, actualInsert.getFailMessage());
+		assertEquals(expectedCount, result.getCount());
+		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
+		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, result.getFailMessage());
+		assertThrows(RuntimeException.class, () -> {
+			loadTimeSeries.apply(request);
+		}, "should have thrown an exception but did not");
 	}
 
 	@Test
+	@DatabaseSetup(
+			connection="observation",
+			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/")
 	@ExpectedDatabase(
 			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/",
 			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED,
 			connection="observation")
 	public void testNullUniqueId() {
 		request.setUniqueId(null);
-		ResultObject actualInsert = loadTimeSeries.processRequest(request);
+		ResultObject result = loadTimeSeries.processRequest(request);
 		Integer expectedCount = null;
-		assertEquals(expectedCount, actualInsert.getCount());
-		assertEquals(LoadTimeSeries.STATUS_FAIL, actualInsert.getStatus());
-		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NULL_UNIQUE_ID, actualInsert.getFailMessage());
+		assertEquals(expectedCount, result.getCount());
+		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
+		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NULL_UNIQUE_ID, result.getFailMessage());
+		assertThrows(RuntimeException.class, () -> {
+			loadTimeSeries.apply(request);
+		}, "should have thrown an exception but did not");
 	}
 }

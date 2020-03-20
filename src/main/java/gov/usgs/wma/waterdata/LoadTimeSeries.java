@@ -31,7 +31,7 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 	@Override
 	public  ResultObject apply(RequestObject request) {
 		ResultObject result = processRequest(request);
-		if (STATUS_FAIL == result.getStatus()) {
+		if (STATUS_FAIL.equalsIgnoreCase(result.getStatus())) {
 			throw new RuntimeException(result.getFailMessage());
 		} else {
 			return result;
