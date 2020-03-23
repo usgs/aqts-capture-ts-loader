@@ -14,5 +14,6 @@ spring:
 
 logging:
   level:
+    root: DEBUG
     org.postgresql: DEBUG
     com.zaxxer: OFF
