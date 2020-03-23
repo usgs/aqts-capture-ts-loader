@@ -46,6 +46,8 @@ functions:
       OBSERVATION_SCHEMA_NAME: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_NAME}
       OBSERVATION_SCHEMA_OWNER_USERNAME: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_OWNER_USERNAME}
       OBSERVATION_SCHEMA_OWNER_PASSWORD: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_OWNER_PASSWORD}
+      PARM_REFERENCE_URL: "https://waterdata.usgs.gov/nwisweb/rdf?parmCd=%s"
+      STAT_REFERENCE_URL: "https://waterdata.usgs.gov/nwisweb/rdf?statCd=%s"
     vpc: ${self:custom.vpc}
 
 resources:

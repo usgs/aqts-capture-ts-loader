@@ -15,7 +15,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 		classes={
 			DBTestConfig.class,
 			TransformDao.class})
-@DatabaseSetup("classpath:/testData/transformDb/groundwaterStatisticalDailyValue/")
+@DatabaseSetup("classpath:/testData/transformDb/")
 @ActiveProfiles("it")
 public class TransformDaoIT extends BaseTestDao {
 
@@ -43,7 +43,7 @@ public class TransformDaoIT extends BaseTestDao {
 	public void testNotFound() {
 		// try to get data using a bad unique id
 		List<TimeSeries> expectedTimeSeriesList = new ArrayList();
-		request.setUniqueId("badTimeSeriesUniqueId");
+		request.setUniqueId(BAD_TS_UNIQUE_ID);
 		List<TimeSeries> actualData = transformDao.getTimeSeries(request.getUniqueId());
 		assertEquals(expectedTimeSeriesList, actualData);
 	}

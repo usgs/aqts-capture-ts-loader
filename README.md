@@ -22,7 +22,7 @@ To run the unit tests of the application use:
 mvn package
 ```
 
-### Database Integration Testing
+### Database Integration Testing with Maven
 To additionally start up both the transform and observation Docker databases and run the integration tests of the application use:
 
 ```.sh
@@ -34,4 +34,37 @@ mvn verify \
     -DOBSERVATION_TESTING_DATABASE_PORT=5444 \
     -DLOCAL_OBSERVATION_TESTING_DATABASE_PORT=5444 \
     -DOBSERVATION_TESTING_DATABASE_ADDRESS=127.0.0.1
+```
+
+### Database Integration Testing with an IDE
+To run tests against local transform and observation Docker databases use:
+
+Transform database:
+```.sh
+docker run -p 127.0.0.1:5437:5432/tcp usgswma/aqts_capture_db:ci
+```
+
+Observation database: 
+```.sh
+docker run -p 127.0.0.1:5444:5432/tcp usgswma/wqp_db:etl
+```
+
+Additionally, add an application.yml configuration file at the project root (the following is an example):
+```.yaml
+TRANSFORM_DATABASE_ADDRESS: localhost
+TRANSFORM_DATABASE_PORT: 5437
+TRANSFORM_DATABASE_NAME: database_name
+TRANSFORM_SCHEMA_NAME: schema_name
+TRANSFORM_SCHEMA_OWNER_USERNAME: schema_owner
+TRANSFORM_SCHEMA_OWNER_PASSWORD: changeMe
+
+OBSERVATION_DATABASE_ADDRESS: 127.0.0.1
+OBSERVATION_DATABASE_PORT: 5444
+OBSERVATION_DATABASE_NAME: wqp_db
+OBSERVATION_SCHEMA_NAME: nwis
+OBSERVATION_SCHEMA_OWNER_USERNAME: nwis_ws_star
+OBSERVATION_SCHEMA_OWNER_PASSWORD: changeMe
+
+PARM_REFERENCE_URL: "https://waterdata.usgs.gov/nwisweb/rdf?parmCd=%s"
+STAT_REFERENCE_URL: "https://waterdata.usgs.gov/nwisweb/rdf?statCd=%s"
 ```

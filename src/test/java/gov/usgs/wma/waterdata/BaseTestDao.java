@@ -33,6 +33,7 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 public abstract class BaseTestDao {
 
 	public static final String TS_UNIQUE_ID = "17f83e62b06e4dc29e78d96b4426a255";
+	public static final String BAD_TS_UNIQUE_ID = "badTimeSeriesUniqueId";
 	public RequestObject request;
 	public TimeSeries timeSeries1;
 	public TimeSeries timeSeries2;

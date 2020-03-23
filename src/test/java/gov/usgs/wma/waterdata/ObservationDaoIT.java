@@ -39,6 +39,9 @@ public class ObservationDaoIT extends BaseTestDao {
 	@Test
 	@DatabaseSetup(
 			connection="observation",
+			value="classpath:/testData/observationDb/")
+	@DatabaseSetup(
+			connection="observation",
 			value="classpath:/testResult/observationDb/groundwaterDailyValue/empty/")
 	@ExpectedDatabase(
 			connection="observation",
