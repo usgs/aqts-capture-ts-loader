@@ -24,7 +24,7 @@ insert into
 values (
 	?
 	,?
-	,(select monitoring_location_id from monitoring_location where nwis.monitoring_location_identifier = ?)
+	,(select monitoring_location_id from nwis.monitoring_location where monitoring_location_identifier = ?)
 	,?
 	,?
 	,(select parm_nm from nwis.parm where parm_cd = ?)
