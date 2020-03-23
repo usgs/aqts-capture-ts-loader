@@ -64,4 +64,7 @@ OBSERVATION_DATABASE_NAME: wqp_db
 OBSERVATION_SCHEMA_NAME: nwis
 OBSERVATION_SCHEMA_OWNER_USERNAME: nwis_ws_star
 OBSERVATION_SCHEMA_OWNER_PASSWORD: changeMe
+
+PARM_REFERENCE_URL: "https://waterdata.usgs.gov/nwisweb/rdf?parmCd=%s"
+STAT_REFERENCE_URL: "https://waterdata.usgs.gov/nwisweb/rdf?statCd=%s"
 ```
