@@ -15,9 +15,10 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 	public static final String STATUS_SUCCESS = "success";
 	public static final String STATUS_FAIL = "fail";
-	public static final String FAIL_MESSAGE_NO_RECORDS = "No records found";
+	public static final String STATUS_SUCCESS_MESSAGE = "Successfully inserted time series with unique id: %s";
+	public static final String FAIL_MESSAGE_NO_RECORDS = "No records found for time series unique id: %s";
 	public static final String FAIL_MESSAGE_NULL_UNIQUE_ID = "Time series unique id was null";
-	public static final String FAIL_MESSAGE_INSERT_FAILED = "Selected row count and inserted row count differ, insert failed";
+	public static final String FAIL_MESSAGE_INSERT_FAILED = "Selected row count: %s and inserted row count: %s differ, insert failed for time series unique id: %s";
 
 	private TransformDao transformDao;
 	private ObservationDao observationDao;
@@ -52,8 +53,9 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 			if (0 == timeSeriesList.size()) {
 				// do not try to delete or insert rows if no data is returned from the get
 				result.setStatus(STATUS_FAIL);
-				result.setFailMessage(FAIL_MESSAGE_NO_RECORDS);
-				LOG.debug("No records found for time series unique id: {}", timeSeriesUniqueId);
+				String failMessageNoRecords = String.format(FAIL_MESSAGE_NO_RECORDS, timeSeriesUniqueId);
+				result.setFailMessage(failMessageNoRecords);
+				LOG.debug(failMessageNoRecords);
 			} else {
 				// otherwise, try to insert new time series or replace existing ones
 				loadTimeSeriesIntoObservationDb(timeSeriesList, result, timeSeriesUniqueId);
@@ -85,11 +87,12 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 		if (count == timeSeriesList.size() && count != 0) {
 			result.setStatus(STATUS_SUCCESS);
-			LOG.debug("Successfully inserted time series with unique id: {} ", timeSeriesUniqueId);
+			LOG.debug(String.format(STATUS_SUCCESS_MESSAGE, timeSeriesUniqueId));
 		} else {
 			result.setStatus(STATUS_FAIL);
-			result.setFailMessage(FAIL_MESSAGE_INSERT_FAILED);
-			LOG.debug("Selected row count: {} and inserted row count: {} differ, insert failed", timeSeriesList.size(), count);
+			String failMessageInsertFailed = String.format(FAIL_MESSAGE_INSERT_FAILED, timeSeriesList.size(), count, timeSeriesUniqueId);
+			result.setFailMessage(failMessageInsertFailed);
+			LOG.debug(failMessageInsertFailed);
 		}
 	}
 }

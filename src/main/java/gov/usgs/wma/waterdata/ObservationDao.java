@@ -20,6 +20,9 @@ import java.sql.SQLException;
 public class ObservationDao {
 	private static final Logger LOG = LoggerFactory.getLogger(ObservationDao.class);
 
+	public static final String PARM_REFERENCE_URL = "https://waterdata.usgs.gov/nwisweb/rdf?parmCd=%s";
+	public static final String STAT_REFERENCE_URL = "https://waterdata.usgs.gov/nwisweb/rdf?statCd=%s";
+
 	@Autowired
 	@Qualifier("jdbcTemplateObservation")
 	protected JdbcTemplate jdbcTemplate;
@@ -63,10 +66,10 @@ public class ObservationDao {
 							ps.setString(4, timeSeries.getMonitoringLocationIdentifier());
 							ps.setString(5, timeSeries.getObservedPropertyId());
 							ps.setString(6, timeSeries.getObservedPropertyId());
-							ps.setString(7, timeSeries.getObservedPropertyId());
+							ps.setString(7, String.format(PARM_REFERENCE_URL, timeSeries.getObservedPropertyId()));
 							ps.setString(8, timeSeries.getStatisticId());
 							ps.setString(9, timeSeries.getStatisticId());
-							ps.setString(10, timeSeries.getStatisticId());
+							ps.setString(10, String.format(STAT_REFERENCE_URL, timeSeries.getStatisticId()));
 							ps.setDate(11, timeSeries.getTimeStep());
 							ps.setString(12, timeSeries.getUnitOfMeasure());
 							ps.setString(13, timeSeries.getResult());

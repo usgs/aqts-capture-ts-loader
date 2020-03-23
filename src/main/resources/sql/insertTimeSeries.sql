@@ -28,10 +28,10 @@ values (
 	,?
 	,?
 	,(select parm_nm from parm where parm_cd = ?)
-	,(select parm_ds from parm where parm_cd = ?)
+	,?
 	,?
 	,(select stat_nm from stat where stat_cd = ?)
-	,(select stat_ds from stat where stat_cd = ?)
+	,?
 	,?
 	,NULL
 	,?

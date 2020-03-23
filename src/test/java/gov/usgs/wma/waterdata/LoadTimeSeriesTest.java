@@ -59,7 +59,7 @@ public class LoadTimeSeriesTest {
 
 		assertNotNull(result);
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
-		assertEquals(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, result.getFailMessage());
+		assertEquals(String.format(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, BaseTestDao.TS_UNIQUE_ID), result.getFailMessage());
 		assertNull(result.getCount());
 		assertThrows(RuntimeException.class, () -> {
 			loadTimeSeries.apply(request);
@@ -79,7 +79,9 @@ public class LoadTimeSeriesTest {
 
 		assertNotNull(result);
 		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
-		assertEquals(LoadTimeSeries.FAIL_MESSAGE_INSERT_FAILED, result.getFailMessage());
+		assertEquals(
+				String.format(LoadTimeSeries.FAIL_MESSAGE_INSERT_FAILED, 2, 0, BaseTestDao.TS_UNIQUE_ID),
+				result.getFailMessage());
 		assertEquals(0, result.getCount());
 		// throws exception
 		assertThrows(RuntimeException.class, () -> {
@@ -92,7 +94,7 @@ public class LoadTimeSeriesTest {
 	public void testFoundGeneric() {
 		genericTimeSeriesList.add(genericTimeSeries1);
 		genericTimeSeriesList.add(genericTimeSeries2);
-		// 2 time series returned
+		// 2 time steps returned
 		when(transformDao.getTimeSeries(anyString())).thenReturn(genericTimeSeriesList);
 		// delete succeeds
 		when(observationDao.deleteTimeSeries(anyString())).thenReturn(2);
@@ -110,7 +112,7 @@ public class LoadTimeSeriesTest {
 	public void testFoundGenericNewRecords() {
 		genericTimeSeriesList.add(genericTimeSeries1);
 		genericTimeSeriesList.add(genericTimeSeries2);
-		// happy path - 2 time series returned
+		// 2 time steps returned
 		when(transformDao.getTimeSeries(anyString())).thenReturn(genericTimeSeriesList);
 		// nothing to delete
 		when(observationDao.deleteTimeSeries(anyString())).thenReturn(0);
