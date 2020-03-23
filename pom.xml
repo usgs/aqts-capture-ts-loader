@@ -211,6 +211,8 @@
                         <OBSERVATION_SCHEMA_NAME>nwis</OBSERVATION_SCHEMA_NAME>
                         <OBSERVATION_SCHEMA_OWNER_USERNAME>nwis_ws_star</OBSERVATION_SCHEMA_OWNER_USERNAME>
                         <OBSERVATION_SCHEMA_OWNER_PASSWORD>changeMe</OBSERVATION_SCHEMA_OWNER_PASSWORD>
+                        <PARM_REFERENCE_URL>https://waterdata.usgs.gov/nwisweb/rdf?parmCd=%s</PARM_REFERENCE_URL>
+                        <STAT_REFERENCE_URL>https://waterdata.usgs.gov/nwisweb/rdf?statCd=%s</STAT_REFERENCE_URL>
                     </environmentVariables>
                 </configuration>
             </plugin>
@@ -238,6 +240,8 @@
                         <OBSERVATION_SCHEMA_NAME>nwis</OBSERVATION_SCHEMA_NAME>
                         <OBSERVATION_SCHEMA_OWNER_USERNAME>nwis_ws_star</OBSERVATION_SCHEMA_OWNER_USERNAME>
                         <OBSERVATION_SCHEMA_OWNER_PASSWORD>changeMe</OBSERVATION_SCHEMA_OWNER_PASSWORD>
+                        <PARM_REFERENCE_URL>https://waterdata.usgs.gov/nwisweb/rdf?parmCd=%s</PARM_REFERENCE_URL>
+                        <STAT_REFERENCE_URL>https://waterdata.usgs.gov/nwisweb/rdf?statCd=%s</STAT_REFERENCE_URL>
                     </environmentVariables>
                 </configuration>
                 <executions>
