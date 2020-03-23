@@ -65,20 +65,20 @@ public class ObservationDao {
 						public void setValues(PreparedStatement ps) throws SQLException {
 							ps.setString(1, timeSeries.getGroundwaterDailyValueIdentifier());
 							ps.setString(2, timeSeries.getTimeSeriesUniqueId());
-//							ps.setString(3, timeSeries.getMonitoringLocationIdentifier());
 							ps.setString(3, timeSeries.getMonitoringLocationIdentifier());
-							ps.setString(4, timeSeries.getObservedPropertyId());
-//							ps.setString(6, timeSeries.getObservedPropertyId());
-							ps.setString(5, String.format(parmReferenceUrl, timeSeries.getObservedPropertyId()));
-							ps.setString(6, timeSeries.getStatisticId());
-//							ps.setString(9, timeSeries.getStatisticId());
-							ps.setString(7, String.format(statReferenceUrl, timeSeries.getStatisticId()));
-							ps.setDate(8, timeSeries.getTimeStep());
-							ps.setString(9, timeSeries.getUnitOfMeasure());
-							ps.setString(10, timeSeries.getResult());
-							ps.setString(11, timeSeries.getApprovals());
-							ps.setString(12, timeSeries.getQualifiers());
-							ps.setString(13, timeSeries.getGrades());
+							ps.setString(4, timeSeries.getMonitoringLocationIdentifier());
+							ps.setString(5, timeSeries.getObservedPropertyId());
+							ps.setString(6, timeSeries.getObservedPropertyId());
+							ps.setString(7, String.format(parmReferenceUrl, timeSeries.getObservedPropertyId()));
+							ps.setString(8, timeSeries.getStatisticId());
+							ps.setString(9, timeSeries.getStatisticId());
+							ps.setString(10, String.format(statReferenceUrl, timeSeries.getStatisticId()));
+							ps.setDate(11, timeSeries.getTimeStep());
+							ps.setString(12, timeSeries.getUnitOfMeasure());
+							ps.setString(13, timeSeries.getResult());
+							ps.setString(14, timeSeries.getApprovals());
+							ps.setString(15, timeSeries.getQualifiers());
+							ps.setString(16, timeSeries.getGrades());
 						}
 					}
 			);

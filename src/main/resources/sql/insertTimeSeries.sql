@@ -24,13 +24,13 @@ insert into
 values (
 	?
 	,?
-	,(select monitoring_location_id from monitoring_location where monitoring_location_identifier = 'USGS-132624144452771')
+	,(select monitoring_location_id from monitoring_location where monitoring_location_identifier = ?)
 	,?
 	,?
-	,'62610'--(select parm_nm from parm where parm_cd = ?)
+	,(select parm_nm from parm where parm_cd = ?)
 	,?
 	,?
-	,'00001' --(select stat_nm from stat where stat_cd = ?)
+	,(select stat_nm from stat where stat_cd = ?)
 	,?
 	,?
 	,NULL
