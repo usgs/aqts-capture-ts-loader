@@ -15,7 +15,7 @@ A named Docker Network is needed to run the automated tests via maven. The follo
 docker network create --subnet=172.25.0.0/16 aqts
 ```
 
-### Unit Testing
+### Unit testing
 To run the unit tests of the application use:
 
 ```.sh
