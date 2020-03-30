@@ -1,0 +1,13 @@
+parm_cd,parm_alias_cd,parm_alias_nm,parm_alias_init_dt,parm_alias_init_nm,parm_alias_rev_dt,parm_alias_rev_nm
+"62610","AQNAME","Elevation, GW, NGVD29","2015-09-10","sbarthol","2016-04-06","pearsall"
+"62610","AQPARM","AQ211","2015-09-10","sbarthol","2015-09-10","sbarthol"
+"62610","AQUNIT","ft","2015-09-10","sbarthol","2015-09-10","sbarthol"
+"62610","SRSID","1642461","2020-01-21","pearsall","2020-01-21","pearsall"
+"62610","WEB","Groundwater level above NGVD 1929, feet","2012-01-03","pearsall","2012-04-02","pearsall"
+"62610","WQPCROSSWALK","Elevation, groundwater surface, MSL","2020-01-21","pearsall","2020-01-21","pearsall"
+"62611","AQNAME","Elevation, GW, NAVD88","2015-09-10","sbarthol","2016-04-06","pearsall"
+"62611","AQPARM","AQ210","2015-09-10","sbarthol","2015-09-10","sbarthol"
+"62611","AQUNIT","ft","2015-09-10","sbarthol","2015-09-10","sbarthol"
+"62611","SRSID","1642461","2020-01-21","pearsall","2020-01-21","pearsall"
+"62611","WEB","Groundwater level above NAVD 1988, ft","2010-03-29","pearsall","2010-03-29","pearsall"
+"62611","WQPCROSSWALK","Elevation, groundwater surface, MSL","2020-01-21","pearsall","2020-01-21","pearsall"
