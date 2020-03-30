@@ -4,3 +4,6 @@
 /.env
 .settings/
 target/
+/.attach_pid*
+/.classpath
+/.project

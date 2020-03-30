@@ -27,7 +27,7 @@ values (
 	,(select monitoring_location_id from monitoring_location where monitoring_location_identifier = ?)
 	,?
 	,?
-	,(select parm_nm from parm where parm_cd = ?)
+	,(select parm_alias_nm from parm_alias where parm_cd = ? and parm_alias_cd = 'WEB')
 	,?
 	,?
 	,(select stat_nm from stat where stat_cd = ?)
