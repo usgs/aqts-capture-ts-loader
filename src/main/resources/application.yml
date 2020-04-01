@@ -11,6 +11,7 @@ spring:
     password: ${OBSERVATION_SCHEMA_OWNER_PASSWORD}
     hikari:
       maximum-pool-size: 2
+      auto-commit: false
 
 logging:
   level:
