@@ -16,6 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 
 @Component
@@ -38,6 +39,7 @@ public class ObservationDao {
 	@Value("classpath:sql/insertTimeSeries.sql")
 	protected Resource insertQuery;
 
+	@Transactional
 	public Integer deleteTimeSeries(String timeSeriesUniqueId) {
 		Integer rowsDeletedCount = null;
 		try {

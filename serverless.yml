@@ -16,8 +16,10 @@ provider:
     "wma:environment": ${self:provider.stage}
     "wma:taggingVersion": ${opt:taggingVersion}
     "wma:costCenter": TBD
+    commitIdentifier: ${git:sha1}
 
 custom:
+  exportGitVariables: false
   accountNumber : ${ssm:/iow/aws/accountNumber}
   vpc:
     securityGroupIds: ${ssm:/iow/retriever-capture/${self:provider.stage}/securityGroupIds~split}
@@ -46,6 +48,7 @@ functions:
       OBSERVATION_SCHEMA_NAME: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_NAME}
       OBSERVATION_SCHEMA_OWNER_USERNAME: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_OWNER_USERNAME}
       OBSERVATION_SCHEMA_OWNER_PASSWORD: ${self:custom.observationDb.connectInfo.NWIS_SCHEMA_OWNER_PASSWORD}
+      ROOT_LOG_LEVEL: INFO
       PARM_REFERENCE_URL: "https://waterdata.usgs.gov/nwisweb/rdf?parmCd=%s"
       STAT_REFERENCE_URL: "https://waterdata.usgs.gov/nwisweb/rdf?statCd=%s"
     vpc: ${self:custom.vpc}
@@ -68,7 +71,7 @@ resources:
             Value:
               Ref: LoadTimeSeriesLambdaFunction
         MetricName: ConcurrentExecutions
-        Statistic: Sum
+        Statistic: Maximum
         ComparisonOperator: GreaterThanOrEqualToThreshold
         Threshold: 150
         Period: 60
@@ -93,6 +96,9 @@ resources:
         EvaluationPeriods: 1
         AlarmActions:
           - Ref: snsTopic
+
+plugins:
+  - serverless-plugin-git-variables
 
 package:
   artifact: aqts-capture-ts-loader-aws.jar

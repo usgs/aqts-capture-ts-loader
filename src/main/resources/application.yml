@@ -11,8 +11,9 @@ spring:
     password: ${OBSERVATION_SCHEMA_OWNER_PASSWORD}
     hikari:
       maximum-pool-size: 2
+      auto-commit: false
 
 logging:
   level:
-    org.postgresql: DEBUG
+    root: ${ROOT_LOG_LEVEL}
     com.zaxxer: OFF

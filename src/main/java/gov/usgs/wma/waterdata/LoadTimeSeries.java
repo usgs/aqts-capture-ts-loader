@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
@@ -74,6 +75,7 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 	 * @param result the status and count of inserted records
 	 * @param timeSeriesUniqueId the unique id used to filter records for the get and the delete.
 	 */
+	@Transactional
 	public void loadTimeSeriesIntoObservationDb (List<TimeSeries> timeSeriesList, ResultObject result, String timeSeriesUniqueId) {
 		// first delete existing time series from observation db
 		observationDao.deleteTimeSeries(timeSeriesUniqueId);
