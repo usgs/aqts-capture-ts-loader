@@ -78,11 +78,8 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 		// first delete existing time series from observation db
 		observationDao.deleteTimeSeries(timeSeriesUniqueId);
 
-		Integer count = 0;
-		for (TimeSeries ts : timeSeriesList) {
-			// insert time series into observation db
-			count += observationDao.insertTimeSeries(ts);
-		}
+		// insert time series into observation db
+		int count = observationDao.insertTimeSeries(timeSeriesUniqueId, timeSeriesList);;
 		result.setCount(count);
 
 		if (count == timeSeriesList.size() && count != 0) {

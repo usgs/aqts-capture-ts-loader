@@ -74,7 +74,7 @@ public class LoadTimeSeriesTest {
 		// delete succeeds
 		when(observationDao.deleteTimeSeries(anyString())).thenReturn(2);
 		// insert fails
-		when(observationDao.insertTimeSeries(any())).thenReturn(0);
+		when(observationDao.insertTimeSeries(anyString(), anyList())).thenReturn(0);
 		ResultObject result = loadTimeSeries.processRequest(request);
 
 		assertNotNull(result);
@@ -99,7 +99,7 @@ public class LoadTimeSeriesTest {
 		// delete succeeds
 		when(observationDao.deleteTimeSeries(anyString())).thenReturn(2);
 		// insert succeeds
-		when(observationDao.insertTimeSeries(any())).thenReturn(1);
+		when(observationDao.insertTimeSeries(anyString(), anyList())).thenReturn(2);
 		ResultObject result = loadTimeSeries.apply(request);
 
 		assertNotNull(result);
@@ -117,7 +117,7 @@ public class LoadTimeSeriesTest {
 		// nothing to delete
 		when(observationDao.deleteTimeSeries(anyString())).thenReturn(0);
 		// insert succeeds
-		when(observationDao.insertTimeSeries(any())).thenReturn(1);
+		when(observationDao.insertTimeSeries(anyString(), anyList())).thenReturn(2);
 		ResultObject result = loadTimeSeries.apply(request);
 
 		assertNotNull(result);

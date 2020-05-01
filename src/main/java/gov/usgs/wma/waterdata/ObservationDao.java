@@ -1,5 +1,11 @@
 package gov.usgs.wma.waterdata;
 
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,14 +13,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
-
-import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 @Component
 public class ObservationDao {
@@ -54,36 +56,41 @@ public class ObservationDao {
 	}
 
 
-	public Integer insertTimeSeries(TimeSeries timeSeries) {
-		Integer rowsInsertedCount = null;
+	public int insertTimeSeries(String timeSeriesUniqueId, List<TimeSeries> timeSeries) {
+		int rowsInsertedCount = 0;
 		try {
 			String sql = new String(FileCopyUtils.copyToByteArray(insertQuery.getInputStream()));
-			rowsInsertedCount = jdbcTemplate.update(
+			int [] rowsInsertedCounts = jdbcTemplate.batchUpdate(
 					sql,
-					new PreparedStatementSetter() {
+					new BatchPreparedStatementSetter() {
 						@Override
-						public void setValues(PreparedStatement ps) throws SQLException {
-							ps.setString(1, timeSeries.getGroundwaterDailyValueIdentifier());
-							ps.setString(2, timeSeries.getTimeSeriesUniqueId());
-							ps.setString(3, timeSeries.getMonitoringLocationIdentifier());
-							ps.setString(4, timeSeries.getMonitoringLocationIdentifier());
-							ps.setString(5, timeSeries.getObservedPropertyId());
-							ps.setString(6, timeSeries.getObservedPropertyId());
-							ps.setString(7, String.format(parmReferenceUrl, timeSeries.getObservedPropertyId()));
-							ps.setString(8, timeSeries.getStatisticId());
-							ps.setString(9, timeSeries.getStatisticId());
-							ps.setString(10, String.format(statReferenceUrl, timeSeries.getStatisticId()));
-							ps.setDate(11, timeSeries.getTimeStep());
-							ps.setString(12, timeSeries.getUnitOfMeasure());
-							ps.setString(13, timeSeries.getResult());
-							ps.setString(14, timeSeries.getApprovals());
-							ps.setString(15, timeSeries.getQualifiers());
-							ps.setString(16, timeSeries.getGrades());
+						public void setValues(PreparedStatement ps, int i) throws SQLException {
+							ps.setString(1, timeSeries.get(i).getGroundwaterDailyValueIdentifier());
+							ps.setString(2, timeSeries.get(i).getTimeSeriesUniqueId());
+							ps.setString(3, timeSeries.get(i).getMonitoringLocationIdentifier());
+							ps.setString(4, timeSeries.get(i).getMonitoringLocationIdentifier());
+							ps.setString(5, timeSeries.get(i).getObservedPropertyId());
+							ps.setString(6, timeSeries.get(i).getObservedPropertyId());
+							ps.setString(7, String.format(parmReferenceUrl, timeSeries.get(i).getObservedPropertyId()));
+							ps.setString(8, timeSeries.get(i).getStatisticId());
+							ps.setString(9, timeSeries.get(i).getStatisticId());
+							ps.setString(10, String.format(statReferenceUrl, timeSeries.get(i).getStatisticId()));
+							ps.setDate(11, timeSeries.get(i).getTimeStep());
+							ps.setString(12, timeSeries.get(i).getUnitOfMeasure());
+							ps.setString(13, timeSeries.get(i).getResult());
+							ps.setString(14, timeSeries.get(i).getApprovals());
+							ps.setString(15, timeSeries.get(i).getQualifiers());
+							ps.setString(16, timeSeries.get(i).getGrades());
+						}
+						@Override
+						public int getBatchSize() {
+							return timeSeries.size();
 						}
 					}
 			);
+			rowsInsertedCount = Arrays.stream(rowsInsertedCounts).sum();
 		} catch (EmptyResultDataAccessException e) {
-			LOG.info("Couldn't find {} - {} ", timeSeries.getTimeSeriesUniqueId(), e.getLocalizedMessage());
+			LOG.info("Couldn't find {} - {} ", timeSeries.get(0).getTimeSeriesUniqueId(), e.getLocalizedMessage());
 		} catch (IOException e) {
 			LOG.error("Unable to get SQL statement", e);
 			throw new RuntimeException(e);
