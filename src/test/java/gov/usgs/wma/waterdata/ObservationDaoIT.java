@@ -2,13 +2,16 @@ package gov.usgs.wma.waterdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+import java.util.List;
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.NONE,
 		classes={
@@ -49,12 +52,9 @@ public class ObservationDaoIT extends BaseTestDao {
 			assertionMode= DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	public void testInsert() {
 		// insert new data
-		Integer actualRowsInsertedCount = observationDao.insertTimeSeries(timeSeries1);
+		Integer actualRowsInsertedCount = observationDao.insertTimeSeries(TS_UNIQUE_ID, List.of(timeSeries1, timeSeries2, timeSeries3));
 		assertNotNull(actualRowsInsertedCount);
-		Integer expectedRowsInsertedCount = 1;
+		Integer expectedRowsInsertedCount = 3;
 		assertEquals(expectedRowsInsertedCount, actualRowsInsertedCount);
-
-		observationDao.insertTimeSeries(timeSeries2);
-		observationDao.insertTimeSeries(timeSeries3);
 	}
 }
