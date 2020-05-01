@@ -92,7 +92,7 @@ public class ObservationDao {
 			);
 			rowsInsertedCount = Arrays.stream(rowsInsertedCounts).sum();
 		} catch (EmptyResultDataAccessException e) {
-			LOG.info("Couldn't find {} - {} ", timeSeries.get(0).getTimeSeriesUniqueId(), e.getLocalizedMessage());
+			LOG.info("Couldn't find {} - {} ", timeSeriesUniqueId, e.getLocalizedMessage());
 		} catch (IOException e) {
 			LOG.error("Unable to get SQL statement", e);
 			throw new RuntimeException(e);
