@@ -57,7 +57,7 @@ public class ObservationDao {
 		return rowsDeletedCount;
 	}
 
-
+	@Transactional
 	public int insertTimeSeries(String timeSeriesUniqueId, List<TimeSeries> timeSeries) {
 		int rowsInsertedCount = 0;
 		try {
