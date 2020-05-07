@@ -74,9 +74,8 @@ public class LoadTimeSeriesIT extends BaseTestDao {
 		request.setUniqueId(BAD_TS_UNIQUE_ID);
 		ResultObject result = loadTimeSeries.processRequest(request);
 		assertNull(result.getCount());
-		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
-		assertEquals(String.format(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, BaseTestDao.BAD_TS_UNIQUE_ID), result.getFailMessage());
-		assertThrows(RuntimeException.class, () -> {
+		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
+		assertDoesNotThrow(() -> {
 			loadTimeSeries.apply(request);
 		}, "should have thrown an exception but did not");
 	}
