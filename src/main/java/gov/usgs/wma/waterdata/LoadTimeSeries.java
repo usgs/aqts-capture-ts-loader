@@ -53,7 +53,7 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 			if (0 == timeSeriesList.size()) {
 				// do not try to delete or insert rows if no data is returned from the get
-				// This is no an error situation - the timeseries just has no observations yet (think new equipment/location)
+				// This is not an error situation - the timeseries just has no observations yet (think new equipment/location)
 				result.setStatus(STATUS_SUCCESS);
 				LOG.info(String.format(MESSAGE_NO_RECORDS, timeSeriesUniqueId));
 			} else {
