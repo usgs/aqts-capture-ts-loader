@@ -17,7 +17,7 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 	public static final String STATUS_SUCCESS = "success";
 	public static final String STATUS_FAIL = "fail";
 	public static final String STATUS_SUCCESS_MESSAGE = "Successfully inserted time series with unique id: %s";
-	public static final String FAIL_MESSAGE_NO_RECORDS = "No records found for time series unique id: %s";
+	public static final String MESSAGE_NO_RECORDS = "No records found for time series unique id: %s";
 	public static final String FAIL_MESSAGE_NULL_UNIQUE_ID = "Time series unique id was null";
 	public static final String FAIL_MESSAGE_INSERT_FAILED = "Selected row count: %s and inserted row count: %s differ, insert failed for time series unique id: %s";
 
@@ -53,10 +53,9 @@ public class LoadTimeSeries implements Function<RequestObject, ResultObject> {
 
 			if (0 == timeSeriesList.size()) {
 				// do not try to delete or insert rows if no data is returned from the get
-				result.setStatus(STATUS_FAIL);
-				String failMessageNoRecords = String.format(FAIL_MESSAGE_NO_RECORDS, timeSeriesUniqueId);
-				result.setFailMessage(failMessageNoRecords);
-				LOG.debug(failMessageNoRecords);
+				// This is not an error situation - the timeseries just has no observations yet (think new equipment/location)
+				result.setStatus(STATUS_SUCCESS);
+				LOG.info(String.format(MESSAGE_NO_RECORDS, timeSeriesUniqueId));
 			} else {
 				// otherwise, try to insert new time series or replace existing ones
 				loadTimeSeriesIntoObservationDb(timeSeriesList, result, timeSeriesUniqueId);

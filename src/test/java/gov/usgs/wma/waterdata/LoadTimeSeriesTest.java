@@ -58,12 +58,11 @@ public class LoadTimeSeriesTest {
 		ResultObject result = loadTimeSeries.processRequest(request);
 
 		assertNotNull(result);
-		assertEquals(LoadTimeSeries.STATUS_FAIL, result.getStatus());
-		assertEquals(String.format(LoadTimeSeries.FAIL_MESSAGE_NO_RECORDS, BaseTestDao.TS_UNIQUE_ID), result.getFailMessage());
+		assertEquals(LoadTimeSeries.STATUS_SUCCESS, result.getStatus());
 		assertNull(result.getCount());
-		assertThrows(RuntimeException.class, () -> {
+		assertDoesNotThrow(() -> {
 			loadTimeSeries.apply(request);
-		}, "should have thrown an exception but did not");
+		}, "should not have thrown an exception but did");
 	}
 
 	@Test
