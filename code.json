@@ -3,7 +3,7 @@
     "name": "AQTS Capture Time Series Loader",
     "organization": "U.S. Geological Survey",
     "description": "Loads time series from the transform database into the observations database.",
-    "version": "0.2.${revision}",
+    "version": "0.3.${revision}",
     "status": "Development",
 
     "permissions": {
