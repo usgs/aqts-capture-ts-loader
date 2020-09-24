@@ -255,7 +255,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!--<showLogs>true</showLogs> -->
+                    <!--enabled to debug docker container-->
+                    <!--<showLogs>true</showLogs>-->
                     <containerNamePattern>%a</containerNamePattern>
                     <!--Setting up the docker containers -->
                     <images>
