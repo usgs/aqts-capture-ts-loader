@@ -49,6 +49,7 @@ functions:
         - arn:aws:iam::${accountId}:role/csr-Lambda-Role
         - accountId:
             Ref: AWS::AccountId
+    reservedConcurrency: 35
     environment:
       FUNCTION_NAME: loadTimeSeries
       AWS_DEPLOYMENT_REGION: ${self:provider.region}
